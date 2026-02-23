@@ -1,0 +1,67 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: whatsapp-bulk-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: whatsapp-bulk-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      MONGODB_URI: mongodb://admin:admin123@mongodb:27017/whatsapp-bulk?authSource=admin
+      WHATSAPP_API_URL: https://graph.facebook.com/v18.0
+      WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID}
+      WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN}
+      Wversion: '3.8'
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: whatsapp-n
+services:
+  mIG  mongod:/    imaget:    container_name::
+    restart: unless-stopped
+    ports:
+ e_    ports:
+      - "27017         - "["    environment:
+   "h      MONGO_INI:5      MONGO_INITDB_ROOT_PASSWORD: admi t    volumes:
+      - mongodb_data:/data/dpe      - monfr    healthcheck:
+      test:te      test: ech        interval: 10s
+      timeout: 5s
+      retries: 5
+  backend:
+    build:
+    :       timeout: 5s
+ p      retries: 517  backen    envir    build        conPI      dockerfile: Docke50    container_name: whatsap      restart: unless-stopped
+    ports:
+ "C    ports:
+      - "5000:5-t      - ""-    environment:
+ lo      PORT: 500
+       MONGODB_U30      WHATSAPP_API_URL: https://graph.facebook.com/v18.0
+      WHATSAPP_PHONE_NUMBER_I         WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBERbu      WHATSAPP_cat > /Users/praveen-4435/repos/WhatsApp-Bulk-Message-Agent/.dockerignore << 'EOF'
+*.log
+node_modules/
+.DS_Store
+.env
+.env.local
+dist/
+build/
+.git
+.gitignore
